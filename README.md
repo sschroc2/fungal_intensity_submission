@@ -1,5 +1,5 @@
 # fungal_intensity_submission
-Repository of code, files, and plots for the manuscript "Do fungi look like macroparasites? Quantifying the patterns and mechanisms of aggregation for host-fungal parasite relationships".
+Repository of code and files for the manuscript "Do fungi look like macroparasites? Quantifying the patterns and mechanisms of aggregation for host-fungal parasite relationships".
 
 ## Repository Structure
 - `code/`: Contains the following R scripts to reproduce analyses and figures
@@ -40,15 +40,6 @@ Repository of code, files, and plots for the manuscript "Do fungi look like macr
 - `data/model/`: contains the following csv files:
 	- `eco_df.csv`: Output of the IPM without host evolution
 	- `evo_df.csv`: Output of the IPM with host evolution of resistance
-- `results/plots`: Repository for saved figures and includes:
-	- `agg_emp_mod.png`: Fig. 6
-	- `distr_plot.png`: Fig. 4
-	- `Focal_supplement.png`: Fig. S3
-	- `gof_plot.png`: Fig. S1
-	- `hiLD50_supplement.png`: Fig. S6
-	- `map_study_sites.png`: Fig. 1
-	- `nearfocal_supplement.png`: Fig. S4
-	- `penn_green_full_plot.png`: Fig S2
 	- `spec_slope_histo.png`: Fig. 3
 	- `Tolerance_supplement.png`: Fig. S5
 	- `tpl_lin_reg.png`: Fig. 2
