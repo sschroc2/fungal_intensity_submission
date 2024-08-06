@@ -1,5 +1,7 @@
 # fungal_intensity_submission
+Repository of code, files, and plots for the manuscript "Do fungi look like macroparasites? Quantifying the patterns and mechanisms of aggregation for host-fungal parasite relationships".
 
+## Repository Structure
 - `code/`: Contains the following R scripts to reproduce analyses and figures
 	- `01_Aggregation_Groups.R`: Contains the code to aggregate raw data into  groups and perform group-level analyses (calculating fungal intensity means and variances, fitting distributions, and calculating individual-group aggregation metrics (Poulin's D and variations of the Coefficient of Variation).
 		-- Output: `fungal_intensity/data/formatted/summary_aggregation_data.csv`
