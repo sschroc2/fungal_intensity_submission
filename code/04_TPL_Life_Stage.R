@@ -12,9 +12,8 @@ library(dplyr)
 ######################################
 
 #Load and combine summary datasets
-three_dat = fread("data/formatted/summary_aggregation_full.csv")[region != "california" & dataset != "panama"]
-sierra_dat = fread("data/formatted/summary_sierra_with_epi_phase.csv")
-full_dat = rbind(three_dat,sierra_dat,fill=TRUE)
+
+full_dat = fread("data/formatted/analysis_aggregation_dataset.csv")
 
 # Keep only datasets with at least 3 bd-positive records to calculate mean and variance
 dat = full_dat[full_dat$num_infected>=3,]

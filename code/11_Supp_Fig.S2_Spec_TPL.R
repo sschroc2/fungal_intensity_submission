@@ -1,4 +1,4 @@
-### Reproduce Figure 3 (Histogram of species-specific TPL slopes)
+### Reproduce Figure S2 (Histogram of species-specific TPL slopes)
 ### Step 1: Load summary file & keep only groups with at least 3 Bd-positive records (for meaningful mean and variance calculations)
 ### Step 2: Examine species list for duplicate species labels and combine and remove unknowns
 ### Step 3: Run linear regression models with mean fungal load as the predictor variable and variance as the response
@@ -16,7 +16,6 @@ library(ggplot2)
 
 #Load summary dataset
 full_dat = fread("data/formatted/analysis_aggregation_dataset.csv")
-#full_dat = fread("data/formatted/old/analysis_aggregation_dataset_all_brazil.csv")
 
 # Keep only datasets with at least 3 bd-positive records to calculate mean and variance
 dat = full_dat[full_dat$num_infected>=3,]
@@ -63,7 +62,7 @@ spec_coef_slp = coef(mod_spec_slp_reg_slp_rdm)$species
 
 
 ################################
-#### Step 4: Plot Histogram ####
+####  Step 4: Plot Fig. S2  ####
 ################################
 
 spec_slope_histo = ggplot() + geom_histogram(aes(x=spec_coef_slp$`log10(mean_natural_with_zeros)`),bins=20,color="cyan4",fill="azure") + geom_hline(yintercept = 0,color="black") + theme_bw() + xlab("TPL Slope") + ylab("Number of Species") + xlim(1.45,2.3) + geom_rect(aes(xmin=1.48, xmax=1.62, ymin=-Inf, ymax=Inf),fill="pink3",alpha=0.1) + geom_vline(aes(xintercept=1.55),color="red") + geom_vline(aes(xintercept=1.48),color="pink3",linetype="longdash") + geom_vline(aes(xintercept=1.62),color="pink3",linetype="longdash") + annotate("text",x=1.53,y=12,label="Average Macroparasite Slope",angle=90,color="red",size=4.5) + theme(axis.title = element_text(size=14),axis.text = element_text(size = 12))

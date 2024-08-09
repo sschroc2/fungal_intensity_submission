@@ -118,5 +118,5 @@ fwrite(sierra_dat, "data/formatted/summary_sierra_with_epi_phase.csv")
 three_datasets = fread("data/formatted/summary_aggregation_data.csv")[region != "california" & dataset != "panama"]
 analysis_aggregation_dataset = rbind(three_datasets,sierra_dat,fill=TRUE)
 
-fwrite(analysis_aggregation_dataset, "data/formatted/analysis_aggregation_dataset.csv")
+fwrite(analysis_aggregation_dataset, "data/formatted/analysis_aggregation_dataset.csv") #This dataset will be used for the analyses
 

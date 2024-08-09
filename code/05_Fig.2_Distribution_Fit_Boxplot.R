@@ -1,9 +1,9 @@
-### Check the goodness of fit (GOF) of the normal distribution on the log-transformed data & recreate Fig. S1
+### Recreate Fig. 2 and calculate statistics of the best fits
 ### Step 1: Load aggregation dataset
 ### Step 2: Subset data by those populations with at least 10 infected individuals and values for all fitted distributions 
 ### Step 3: Calculate the difference between AICs of the fit distributions and rank which distributions had the lowest value
 ### Step 4: Create datasets of delta AICs and distribution rank
-### Step 5: Plot Fig. 4 (Boxplot of delta AICs for each distribution)
+### Step 5: Plot Fig. 2 (Boxplot of delta AICs for each distribution)
 ### Step 6: Calculate proportions of the datasets that fit particular distributions best
 ### Step 7: Similar to 6, but includes multiple best fits (within 2 AIC of lowest value)
 
@@ -56,16 +56,17 @@ melted_aic$variable <- ordered(melted_aic$variable,
                                labels = c("gamma", "log normal", "weibull","exponential"))
 
 ############################
-#### Step 5: Plot Fig 4 ####
+#### Step 5: Plot Fig 2 ####
 ############################
 
-distr_plot = ggplot(melted_aic) + geom_boxplot(aes(x=variable, y=log10(value + 1),color=melted_aic$dataset)) +   
+distr_plot = ggplot(melted_aic) + geom_boxplot(aes(x=variable, y=log10(value + 1),color=melted_aic$dataset))  +   
   ylab(expression(paste(Log[10],"(",Delta," AIC + 1)", sep=""))) + xlab("Distribution") + labs(color="Dataset")  + theme_bw() +  
-  theme(axis.text.x = element_text(angle=45, hjust=1, size=12),axis.title = element_text(size=14),legend.text = element_text(size=12),legend.title = element_text(size=12)) + scale_color_manual(values=c("dodgerblue", "seagreen", "darkorange", "darkorchid"),labels=c( "brazil" = "Brazil","east_bay" = "Eastbay", "serdp" = "SERDP","sierra_nevada" = "Sierra")) + scale_x_discrete(labels=c("log normal" = "Log Normal","weibull" = "Weibull","exponential"="Exponential","gamma" = "Gamma"))
+  theme(axis.text.x = element_text(angle=45, hjust=1, size=12),axis.title = element_text(size=14),legend.text = element_text(size=12),legend.title = element_text(size=12)) + scale_color_manual(values=c("dodgerblue", "seagreen", "darkorange", "darkorchid"),labels=c( "brazil" = "Brazil","east_bay" = "Eastbay", "serdp" = "SERDP","sierra_nevada" = "Sierra")) + scale_x_discrete(labels=c("log normal" = "Lognormal","weibull" = "Weibull","exponential"="Exponential","gamma" = "Gamma"))
 
-ggsave("C:/Users/sarss/OneDrive/Documents/Univ of TN/BD_Database/fungal_intensity/results/plots/distr_plot.png",distr_plot, width=180,height=115,units="mm",dpi=600)
+ggsave("results/plots/distr_plot.png",distr_plot, width=180,height=115,units="mm",dpi=600)
 
-
+#Add data points to plot 
+# +  geom_point(aes(x=variable, y=log10(value + 1),color=melted_aic$dataset),alpha=0.5,position=position_dodge(width=0.75))
 
 ##############################################################
 #### Step 6: Find the percentage of best fit distribution ####
@@ -123,10 +124,11 @@ delta_aic_update$weibull_best_fit = ifelse(delta_aic_update$best_fit!="weibull",
 
 delta_aic_update$gamma_best_fit = ifelse(delta_aic_update$best_fit!="gamma",NA,ifelse(delta_aic_update$exp_under2==0 & delta_aic_update$lnorm_under2==0 & delta_aic_update$weibull_under2==0,1,0))
 
-nrow(delta_aic_update[delta_aic_update$lnorm_best_fit==1,])/nrow(delta_aic_update) #38.0%
-nrow(delta_aic_update[delta_aic_update$exp_best_fit==1,])/nrow(delta_aic_update) #0%
-nrow(delta_aic_update[delta_aic_update$weibull_best_fit==1,])/nrow(delta_aic_update) #4.4%
-nrow(delta_aic_update[delta_aic_update$gamma_best_fit==1,])/nrow(delta_aic_update) #).4%
+#Proportion of groups that were best described by a single distribution
+ln_best = nrow(delta_aic_update[delta_aic_update$lnorm_best_fit==1,])/nrow(delta_aic_update) #38.0%
+exp_best = nrow(delta_aic_update[delta_aic_update$exp_best_fit==1,])/nrow(delta_aic_update) #0%
+wb_best = nrow(delta_aic_update[delta_aic_update$weibull_best_fit==1,])/nrow(delta_aic_update) #4.4%
+gam_best = nrow(delta_aic_update[delta_aic_update$gamma_best_fit==1,])/nrow(delta_aic_update) #).4%
 
 #Proportion of each distribution that is within 2 AIC points of the lowest value
 tot = nrow(delta_aic_update)
@@ -140,7 +142,7 @@ gamma_perc #35.2%
 lnorm_perc #76.7%
 weibull_perc #58.8%
 
-100-(38.73 + 4.28 + 0.37)
+1-(ln_best + exp_best + wb_best + gam_best) #57.3
 
 #Percent based on best fit category
 diff_under2 = as.data.frame(delta_aic_update %>%

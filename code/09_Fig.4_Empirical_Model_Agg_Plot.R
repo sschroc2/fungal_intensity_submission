@@ -1,4 +1,4 @@
-### Reproduce Figure 6 (Mean-aggregation plot for empirical data and model predictions)
+### Reproduce Figure 4 (Mean-aggregation plot for empirical data and model predictions)
 ### Step 1: Load Sierra summary file and remove records with fewer than 2 Bd-positive and larval groups (for consistent comparisons)
 ### Step 2: Plot empirical by log mean fungal load against aggregation metrics, grouped by epizoological stage
 ### Step 3: Plot the results of the integral projection model
@@ -15,7 +15,7 @@ library(data.table)
 #### Step 1: Load and format data ####
 ######################################
 
-sierra_dat = fread("data/formatted/summary_sierra_with_epi_phase.csv")
+sierra_dat = fread("data/formatted/analysis_aggregation_dataset.csv")[dataset == "sierra_nevada"]
 sierra_dat[, "log_mean":=mean_log10_without_zeros]
 sierra_no_larva = sierra_dat[life_stage != "larva" & num_infected >= 2 & poulin_D > 0]
 

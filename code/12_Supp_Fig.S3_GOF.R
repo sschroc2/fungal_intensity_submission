@@ -1,4 +1,4 @@
-### Check the goodness of fit (GOF) of the normal distribution on the log-transformed data & recreate Fig. S1
+### Check the goodness of fit (GOF) of the normal distribution on the log-transformed data & recreate Fig. S3
 ### Step 1: Load aggregation dataset
 ### Step 2: Adjust p-values for multiple tests
 ### Step 3: Check GOF by life stage
@@ -82,11 +82,21 @@ nrow(dat_sierra[dat_sierra$p_adj<=0.05,])/nrow(dat_sierra) #17.0%
 nrow(dat_brazil[dat_brazil$p_adj<=0.05,])/nrow(dat_brazil) #20.0% 
 
 #########################
-#### Step 6: Plot S1 ####
+#### Step 6: Plot S3 ####
 #########################
 
-gof_plot = ggplot() + geom_boxplot(aes(x=dat_eastbay$dataset,y=dat_eastbay$p_adj),color="seagreen") + geom_boxplot(aes(x=dat_serdp$dataset,y=dat_serdp$p_adj),color="darkorange") + geom_boxplot(aes(x=dat_sierra$dataset,y=dat_sierra$p_adj),color="darkorchid") + geom_boxplot(aes(x=dat_brazil$dataset,y=dat_brazil$p_adj),color="dodgerblue") + geom_abline(intercept = 0.05,slope=0,color="red")+ xlab("Dataset") + ylab("Goodness of Fit (adjusted p-value)") + theme_bw() + theme( axis.title = element_text(size=14),axis.text.x=element_text(size=12))+scale_x_discrete(labels=c("east_bay" = "Eastbay", "serdp" = "Eastern US","sierra_nevada" = "Sierra", "brazil" = "Brazil")) + geom_text(aes(y=0.06, label="\np=0.05", x=0.6), colour="red", angle=0)
+gof_plot = ggplot() + 
+  geom_boxplot(aes(x=dat_eastbay$dataset,y=dat_eastbay$p_adj),color="seagreen") + 
+  geom_boxplot(aes(x=dat_serdp$dataset,y=dat_serdp$p_adj),color="darkorange") + 
+  geom_boxplot(aes(x=dat_sierra$dataset,y=dat_sierra$p_adj),color="darkorchid") + 
+  geom_boxplot(aes(x=dat_brazil$dataset,y=dat_brazil$p_adj),color="dodgerblue") + 
+  geom_abline(intercept = 0.05,slope=0,color="red")+ xlab("Dataset") + ylab("Goodness of Fit (adjusted p-value)") + theme_bw() + theme( axis.title = element_text(size=14),axis.text.x=element_text(size=12))+scale_x_discrete(labels=c("east_bay" = "Eastbay", "serdp" = "Eastern US","sierra_nevada" = "Sierra", "brazil" = "Brazil")) + geom_text(aes(y=0.06, label="\np=0.05", x=0.6), colour="red", angle=0)
+
 
 ggsave("results/plots/gof_plot.png",gof_plot, width=180,height=116,units="mm",dpi=600)
 
-
+#Add data points to graph
+#  + geom_point(aes(x=dat_eastbay$dataset,y=dat_eastbay$p_adj),color="seagreen",alpha=0.5,position=position_dodge(width=0.5)) + 
+#   geom_point(aes(x=dat_serdp$dataset,y=dat_serdp$p_adj),color="darkorange",alpha=0.5,position=position_dodge(width=0.5)) + 
+#   geom_point(aes(x=dat_sierra$dataset,y=dat_sierra$p_adj),color="darkorchid",alpha=0.5,position=position_dodge(width=0.5)) + 
+#   geom_point(aes(x=dat_brazil$dataset,y=dat_brazil$p_adj),color="dodgerblue",alpha=0.5,position=position_dodge(width=0.5))

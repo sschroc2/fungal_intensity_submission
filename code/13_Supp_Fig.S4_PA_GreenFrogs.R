@@ -1,4 +1,4 @@
-### Reproduce Figure S2 (Pennsylvania green frog mean-aggregation plot)
+### Reproduce Figure S4 (Pennsylvania green frog mean-aggregation plot)
 ### Step 1: Load, format, and select relevant data
 ### Step 2: Plot empirical data by log mean fungal load against Poulin's D
 ### Step 3: Remove population seemingly in the "invasion space" and re-plot
@@ -18,9 +18,7 @@ library(gridtext)
 #### Step 1: Load and format data ####
 ######################################
 
-#Load and combine summary datasets
-three_dat = fread("data/formatted/summary_aggregation_full.csv")[region != "california" & dataset != "panama"]
-full_dat = rbind(three_dat,sierra_dat,fill=TRUE)
+full_dat = fread("data/formatted/analysis_aggregation_dataset.csv")
 dat = full_dat[full_dat$num_infected>=3,]
 
 dat$var_natural_with_zeros = as.numeric(dat$var_natural_with_zeros)
@@ -50,9 +48,9 @@ penn_green_trun_plot = ggplot(data=dat_penn[dat_penn$poulin_D>0.25,]) + geom_poi
   geom_smooth(aes(x=mean_log10_without_zeros, y=poulin_D),color="black") + ylab("") + ylim(-0.1,1) + xlim(1.4,4.5) + xlab(expression(paste("Mean ",Log[10],"(Bd Load)", sep=""))) + theme_bw() + theme(legend.title = element_text(size=14),legend.text = element_text(size=12),axis.title = element_text(size=14),legend.position = "none")+
   labs(tag="B")
 
-###############################
-#### Step 4: Combine plots ####
-###############################
+#########################################
+#### Step 4: Combine plots (Fig. S4) ####
+#########################################
 
 green_w_leg = ggplot(data=dat_penn[dat_penn$poulin_D>0.25,]) + geom_point(size=2.5,aes(x=mean_log10_without_zeros, y=poulin_D,color=region),show.legend = TRUE) + scale_color_manual(values="firebrick",labels="Pennsylvania\n green frogs",name="") +
   geom_smooth(aes(x=mean_log10_without_zeros, y=poulin_D),color="black") + ylab("") + xlab(expression(paste("Mean ",Log[10],"(Bd Load)", sep=""))) + theme_bw() + theme(legend.title = element_text(size=14),legend.text = element_text(size=12),axis.title = element_text(size=14),legend.position = "right")
@@ -66,4 +64,4 @@ full_green_plot = grid.arrange(
   layout_matrix = rbind(c(1, 2, 3))
 )
 
-ggsave("C:/Users/sarss/OneDrive/Documents/Univ of TN/BD_Database/fungal_intensity/results/plots/penn_green_full_plot.png",full_green_plot, width=180,height=105,units="mm",dpi=600)
+ggsave("results/plots/penn_green_full_plot.png",full_green_plot, width=180,height=105,units="mm",dpi=600)

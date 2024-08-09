@@ -14,7 +14,7 @@ library(betareg)
 #### Step 1: Load and format data ####
 ######################################
 
-sierra_dat = fread("data/formatted/summary_sierra_with_epi_phase.csv")
+sierra_dat = fread("data/formatted/analysis_aggregation_dataset.csv")[dataset == "sierra_nevada"]
 
 # Beta regression 1: Does aggregation vary with epizoological stage?
 sierra_dat[, "log_mean":=mean_log10_without_zeros]

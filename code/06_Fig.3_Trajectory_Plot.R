@@ -1,5 +1,5 @@
-### Reproduce Figure 5 (Trajectory plot & mean-aggregation plot for 7 well-studied sites)
-### Step 1: Load Sierra summary file and remove records with fewer than 2 Bd-positive and larval groups (for consistent comparisons)
+### Reproduce Figure 3 (Trajectory plot & mean-aggregation plot for 7 well-studied sites)
+### Step 1: Load Sierra records from summary file and remove records with fewer than 2 Bd-positive and larval groups (for consistent comparisons)
 ### Step 2: Select specific sites, relabel, and plot time vs. host abundance
 ### Step 3: Plot these groups by log mean fungal load against Poulin's D aggregation metric
 ### Step 4: Combine plots
@@ -17,7 +17,7 @@ library(gridtext)
 #### Step 1: Load and format data ####
 ######################################
 
-sierra_dat = fread("data/formatted/summary_sierra_with_epi_phase.csv")
+sierra_dat = fread("data/formatted/analysis_aggregation_dataset.csv")[dataset == "sierra_nevada"]
 sierra_dat[, "log_mean":=mean_log10_without_zeros]
 sierra_no_larva = sierra_dat[life_stage != "larva" & num_infected >= 2 & poulin_D > 0]
 
@@ -70,9 +70,9 @@ p2 = ggplot(sierra_dat[num_infected >= 2 & site_id %in% trajectory_sites & life_
   scale_color_manual(name="Phase",values=c('goldenrod3','darkturquoise'),labels=c("Invasion \n(Southern Sierra)","Post-Invasion \n(Southern Sierra)","Enzootic \n(Northern Sierra)"))  + theme_bw() + ylab("Poulin's D") + xlab(expression(paste("Mean ",Log[10],"(Bd Load)", sep=""))) + labs(tag="B")  + theme(axis.title = element_text(size=14),legend.title = element_text(size=14),legend.text = element_text(size=12),plot.tag = element_text(size=14),axis.text = element_text(size=10),legend.position = c(0.7, 0.12))
 
 
-######################################
-####     Step 4: Combine Plots    ####
-######################################
+##########################################
+#### Step 4: Combine Plots (Fig. 3)   ####
+##########################################
 
 #Arranged figure
 full_plot = grid.arrange(

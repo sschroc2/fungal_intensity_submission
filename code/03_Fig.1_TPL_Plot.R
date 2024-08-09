@@ -1,4 +1,4 @@
-### Reproduce Figure 2 (Slope of Taylor's Power Law for each dataset)
+### Reproduce Figure 1 (Slope of Taylor's Power Law for each dataset)
 ### Step 1: Load summary file & keep only groups with at least 3 Bd-positive records (for meaningful mean and variance calculations)
 ### Step 2: Set function to specify number of decimal places to include (for plot aesthetics)
 ### Step 3: Run linear regression models with mean fungal load as the predictor variable and variance as the response
@@ -60,16 +60,16 @@ stat_lab = rbind(l_brazil,l_eastbay,l_serdp,l_sierra)
 legend_lines <- c("Lognormal = 2" = "dotted", "Poisson = 1" = "solid", "Macroparasites = 1.55 [ 1.48 - 1.62 ]" = "dashed")
 
 ###############################
-#### Step 5: Plot Figure 2 ####
+#### Step 5: Plot Figure 1 ####
 ###############################
 
 tpl_plot = ggplot()  + 
   geom_abline(aes(intercept = 1.098, slope =1.551,linetype = "A"), color="black", linewidth=1) + 
-  geom_abline(aes(intercept = 0, slope =1,linetype = "B"), color="black", linewidth=0.5) + 
-  geom_abline(aes(intercept = 0, slope =2,linetype = "C"), color="black", linewidth=0.5) + 
+  geom_abline(aes(intercept = 0, slope =1,linetype = "B"), color="black", linewidth=1) + 
+  geom_abline(aes(intercept = 0, slope =2,linetype = "C"), color="black", linewidth=1) + 
   geom_point(alpha=0.35,size=2.5,shape=21, aes(x=log10(mean_natural_with_zeros), y=log10(var_natural_with_zeros), color=dataset, fill=dataset),data=dat) + 
   geom_smooth(aes(x=log10(mean_natural_with_zeros),y=log10(var_natural_with_zeros), color=dataset),method="lm",se=TRUE,linewidth=1.5,data=dat) + 
-  scale_linetype_manual(name="",values = c("solid","dotted","longdash"),labels = c("Macroparasites = 1.55 [ 1.48 - 1.62 ]", "Poisson = 1", "Lognormal = 2")) + 
+  scale_linetype_manual(name="",values = c("solid","dotted","dashed"),labels = c("Macroparasites = 1.55 [ 1.48 - 1.62 ]", "Poisson = 1", "Lognormal = 2")) + 
   scale_fill_manual(name="",values = c("lightskyblue1", "palegreen", "goldenrod1", "plum1"),labels = c(stat_lab[1:nrow(stat_lab)])) +  
   scale_color_manual(name="",values = c("dodgerblue", "seagreen", "darkorange", "darkorchid"),labels = c(stat_lab[1:nrow(stat_lab)])) + guides(color=guide_legend(override.aes=list(fill="lightgray"))) + 
   xlim(-2,8) +  ylim(-5,17.5) + xlab(expression(paste(Log[10],"(Mean Bd Load)", sep=""))) + ylab(expression(paste(Log[10],"(Variance Bd Load)", sep=""))) + theme_bw()  +   theme( legend.text=element_text(size=10), legend.title=element_text(size=14), title = element_text(size=18), axis.title = element_text(size=14),legend.spacing.y = unit(0.1, "cm")) + guides(linetype=guide_legend(title="TPL Slopes"))

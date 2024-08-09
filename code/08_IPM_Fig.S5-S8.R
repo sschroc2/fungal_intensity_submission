@@ -1,13 +1,13 @@
-### Integral Projection Model & code for Figures S3, S4, S5, S6 (IPM model outputs)
+### Integral Projection Model & code for Figures S5, S6, S7, S8 (IPM model outputs)
 ### Step 1: Load Sierra dataset
 ### Step 2: Set IPM functions
 ### Step 3: Set parameters
 ### Step 4: Set functions for aggregation metrics
 ### Step 5: Set functions to simulate data & extract values
-### Step 6: S5 plot
-### Step 7: S3 plot
-### Step 8: S4 plot
-### Step 9: S6 plot
+### Step 6: S7 plot
+### Step 7: S5 plot
+### Step 8: S6 plot
+### Step 9: S8 plot
 
 
 #Clear the environment to be safe
@@ -26,8 +26,8 @@ library(grid)
 #### Step 1: Load data & set time step ####
 ###########################################
 
-#Read in summary_sierra_with_epi_phase_0.5.csv
-sierra_dat = fread("data/formatted/summary_sierra_with_epi_phase.csv")
+#Read in just Sierra data
+sierra_dat = fread("data/formatted/analysis_aggregation_dataset.csv")[dataset == "sierra_nevada"]
 
 #Time step is one day everywhere
 deltat=1
@@ -669,7 +669,7 @@ runner1=function(params,init,steps){
 
 
 ###########################
-#### Step 6: Figure S5 ####
+#### Step 6: Figure S7 ####
 ###########################
 
 temp=runner1(params_temp,c(1,rep(0,bins),1),365)
@@ -720,7 +720,7 @@ agg_plots_all = grid.arrange(
 dev.off()
 
 ###########################
-#### Step 7: Figure S3 ####
+#### Step 7: Figure S5 ####
 ###########################
 
 temp_focal=runner1(params_focal,c(1,rep(0,bins),1),365)
@@ -754,7 +754,7 @@ focal_plots_all = grid.arrange(
 dev.off()
 
 ###########################
-#### Step 8: Figure S4 ####
+#### Step 8: Figure S6 ####
 ###########################
 
 params_nearfocal=params_focal
@@ -792,7 +792,7 @@ dev.off()
 
 
 ###########################
-#### Step 9: Figure S6 ####
+#### Step 9: Figure S8 ####
 ###########################
 
 params_hiLD50=params

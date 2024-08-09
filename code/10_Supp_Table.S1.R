@@ -1,16 +1,28 @@
 ### Extract data for Table S1
+### Step 1: Load raw (not publicly available on Github) & summarized data
+### Step 2: Pull statistics on raw dataset
+### Step 3: Pull statistics on summarized dataset
+###***NOTE: Step 2 will not run because raw data is not available on Github
 
 
 library(dplyr)
 library(data.table)
 
-bd = fread("data/formatted/full_aggregation_data.csv")[location != "panama" & region !="new_mexico"]
+##############################################
+#### Step 1: Load raw and summarized data ####
+##############################################
+
+bd = fread("data/cleaned/full_aggregation_data.csv")[location != "panama" & region !="new_mexico"] #Not accessible through Github
 bd$bd_load = bd$target_quant_per_swab 
 bd_pos=bd[bd$target_quant_per_swab>0,]
 
-full_dat = fread("data/formatted/summary_aggregation_full.csv")[region != "california" & dataset != "panama"]
-sierra_dat = fread("data/formatted/summary_sierra_with_epi_phase.csv")
-all_data = rbind(full_dat,sierra_dat,fill=TRUE)
+all_data = fread("data/formatted/analysis_aggregation_dataset.csv")
+
+########################################
+#### Step 2: Pull stats on raw data ####
+########################################
+
+### ***NOTE: Raw data not provided on Github 
 
 #Statistics on database
 nrow(bd) #Number of records (56,912) 
@@ -53,6 +65,11 @@ length(unique(unique_spec)) #number of unique species (93)
 unique_spec_pos = bd_pos$species_capture[!(bd_pos$species_capture %in% genus_level) & !(bd_pos$species_capture %in% unknowns) & !(bd_pos$species_capture %in% repeats)]
 length(unique(unique_spec_pos)) #number of unique species (78)
 
+
+###############################################
+#### Step 3: Pull stats on summarized data ####
+###############################################
+
 ### Statistics on datset populations
 all = all_data %>%
   count(all_data$dataset)
@@ -86,18 +103,20 @@ more_than_one = two_infected %>%
 
 sum(more_than_one$n)
 
-mean(two_infected$num_infected[two_infected$dataset=="brazil"]) #5.36
-sd(two_infected$num_infected[two_infected$dataset=="brazil"]) #3.44
-mean(two_infected$num_infected[two_infected$dataset=="east_bay"]) #6.63
-sd(two_infected$num_infected[two_infected$dataset=="east_bay"]) #4.56
-mean(two_infected$num_infected[two_infected$dataset=="serdp"]) #10.28
-sd(two_infected$num_infected[two_infected$dataset=="serdp"]) #8.40
-mean(two_infected$num_infected[two_infected$dataset=="sierra_nevada"]) #35.23
-sd(two_infected$num_infected[two_infected$dataset=="sierra_nevada"]) #64.59
-
+mean(three_infected$num_infected[three_infected$dataset=="brazil"]) #6.04
+sd(three_infected$num_infected[three_infected$dataset=="brazil"]) #3.39
+mean(three_infected$num_infected[three_infected$dataset=="east_bay"]) #7.66
+sd(three_infected$num_infected[three_infected$dataset=="east_bay"]) #4.42
+mean(three_infected$num_infected[three_infected$dataset=="serdp"]) #11.21
+sd(three_infected$num_infected[three_infected$dataset=="serdp"]) #8.37
+mean(three_infected$num_infected[three_infected$dataset=="sierra_nevada"]) #37.64
+sd(three_infected$num_infected[three_infected$dataset=="sierra_nevada"]) #66.25
 
 unique(two_infected$species[!(two_infected$species %in% genus_level) & !(two_infected$species %in% unknowns) & !(two_infected$species %in% repeats)])
-#number of unique species (41) with 2+ infected
+#number of unique species (41) with 3+ infected
+
+unique(three_infected$species[!(three_infected$species %in% genus_level) & !(three_infected$species %in% unknowns) & !(three_infected$species %in% repeats)])
+#number of unique species (35) with 3+ infected
 
 
 ten_infected = all_data[all_data$num_infected>9,]
@@ -114,37 +133,41 @@ unique(ten_infected$species[!(ten_infected$species %in% genus_level) & !(ten_inf
 #number of unique species (22)
 
 #Compare number of records across these subsets
-all_tab = cbind(all,more_than_one,more_than_nine)
-all_df = as.data.frame(all_tab[,c(1,2,4,6)])
-colnames(all_df) = c("dataset","all","at_least_2","at_least_10")
+all_tab = cbind(all,more_than_one,more_than_two,more_than_nine)
+all_df = as.data.frame(all_tab[,c(1,2,4,6,8)])
+colnames(all_df) = c("dataset","all","at_least_2","at_least_3","at_least_10")
 
 
-ls_list = two_infected %>%
-  group_by(two_infected$dataset) %>%
+ls_list = three_infected %>%
+  group_by(three_infected$dataset) %>%
   count(life_stage)
 
-ls_list$n_tot = ifelse(ls_list$`two_infected$dataset`=="brazil",59,ifelse(ls_list$`two_infected$dataset`=="east_bay",326,ifelse(ls_list$`two_infected$dataset`=="serdp",257,444)))
+ls_list$n_tot = ifelse(ls_list$`three_infected$dataset`=="brazil",more_than_two$n[more_than_two$`three_infected$dataset`=="brazil"],ifelse(ls_list$`three_infected$dataset`=="east_bay",more_than_two$n[more_than_two$`three_infected$dataset`=="east_bay"],ifelse(ls_list$`three_infected$dataset`=="serdp",more_than_two$n[more_than_two$`three_infected$dataset`=="serdp"],more_than_two$n[more_than_two$`three_infected$dataset`=="sierra_nevada"])))
 
 ls_list$perc = (ls_list$n / ls_list$n_tot)*100
 
-two_infected %>%
-  group_by(two_infected$dataset) %>%
+phz = three_infected %>%
+  group_by(three_infected$dataset) %>%
   count(phase)
 
-szn_list = two_infected %>%
-  group_by(two_infected$dataset) %>%
+phz$n_tot = ifelse(phz$`three_infected$dataset`=="brazil",more_than_two$n[more_than_two$`three_infected$dataset`=="brazil"],ifelse(phz$`three_infected$dataset`=="east_bay",more_than_two$n[more_than_two$`three_infected$dataset`=="east_bay"],ifelse(phz$`three_infected$dataset`=="serdp",more_than_two$n[more_than_two$`three_infected$dataset`=="serdp"],more_than_two$n[more_than_two$`three_infected$dataset`=="sierra_nevada"])))
+
+phz$perc = (phz$n / phz$n_tot)*100
+
+szn_list = three_infected %>%
+  group_by(three_infected$dataset) %>%
   count(season)
 
-szn_list$n_tot = ifelse(szn_list$`two_infected$dataset`=="brazil",59,ifelse(szn_list$`two_infected$dataset`=="east_bay",326,ifelse(szn_list$`two_infected$dataset`=="serdp",257,444)))
+szn_list$n_tot = ifelse(szn_list$`three_infected$dataset`=="brazil",more_than_two$n[more_than_two$`three_infected$dataset`=="brazil"],ifelse(szn_list$`three_infected$dataset`=="east_bay",more_than_two$n[more_than_two$`three_infected$dataset`=="east_bay"],ifelse(szn_list$`three_infected$dataset`=="serdp",more_than_two$n[more_than_two$`three_infected$dataset`=="serdp"],more_than_two$n[more_than_two$`three_infected$dataset`=="sierra_nevada"])))
 
 szn_list$perc = (szn_list$n / szn_list$n_tot)*100
 
-spec_list = two_infected %>%
-  group_by(two_infected$dataset) %>%
+spec_list = three_infected %>%
+  group_by(three_infected$dataset) %>%
   count(species)
 
 
-spec_list$n_tot = ifelse(spec_list$`two_infected$dataset`=="brazil",59,ifelse(spec_list$`two_infected$dataset`=="east_bay",326,ifelse(spec_list$`two_infected$dataset`=="serdp",257,444)))
+spec_list$n_tot = ifelse(spec_list$`three_infected$dataset`=="brazil",more_than_two$n[more_than_two$`three_infected$dataset`=="brazil"],ifelse(spec_list$`three_infected$dataset`=="east_bay",more_than_two$n[more_than_two$`three_infected$dataset`=="east_bay"],ifelse(spec_list$`three_infected$dataset`=="serdp",more_than_two$n[more_than_two$`three_infected$dataset`=="serdp"],more_than_two$n[more_than_two$`three_infected$dataset`=="sierra_nevada"])))
 
 spec_list$perc = (spec_list$n / spec_list$n_tot)*100
 

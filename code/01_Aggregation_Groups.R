@@ -1,7 +1,7 @@
 ### Aggregate records into analysis groups
 ###
 ### Step 1: Create functions to calculate Poulin's D/Gini Index & coefficient of variation metrics
-### Step 2: Load the cleaned combined datasets
+### Step 2: Load the cleaned combined datasets 
 ### Step 3: Group records based on dataset, site, year, species, life stage, and temporal group (season) and remove groups with fewer than 10 records
 ### Step 4: Run loop and create summary dataset
 ###    - calculates natural mean & variance and log10 mean & variance with and without zero values
